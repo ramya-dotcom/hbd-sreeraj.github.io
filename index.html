@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extended Portrait Image Waterfall Card</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('BGIMAGE.jpg');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card-container {
+            width: 400px;
+            height: 800px; /* INCREASED HEIGHT to fit all cards */
+            margin-top: -75px;
+            margin-left: 40px;
+            background-color: rgb(0, 5, 46);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            padding: 20px;
+            position: relative;
+        }
+
+        .card-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #7fbbe0;
+        }
+
+        .waterfall-area {
+            position: relative;
+            height: 800px; /* INCREASED HEIGHT for waterfall area */
+            margin-bottom: 20px;
+        }
+
+        .image-card {
+            position: absolute;
+            width: 200px;
+            height: 280px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: top 3s ease, opacity 1s ease;
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Hide all cards except the first one */
+        .image-card:not(:first-child) {
+            opacity: 0;
+        }
+
+        /* Set specific z-index for each card */
+        /* FIXED: Reversed z-index order so later cards appear on top */
+        #card1 { z-index: 1; }  /* Was 7 */
+        #card2 { z-index: 2; }  /* Was 6 */
+        #card3 { z-index: 3; }  /* Was 5 */
+        #card4 { z-index: 4; }  /* Was 4 */
+        #card5 { z-index: 5; }  /* Was 3 */
+        #card6 { z-index: 6; }  /* Was 2 */
+        #card7 { z-index: 7; }  /* Was 1 */
+
+        .pull-tab {
+            width: 180px;
+            height: 50px;
+            margin-top: -50px;
+            margin-left: 100px;
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 20px;
+            font-weight: bold;
+            /* margin: 0 auto; */
+            display: block;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .reset-button {
+            width: 180px;
+            height: 50px;
+            margin-top: -50px;
+            margin-left: 100px;
+            background-color: #085496;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            /* margin: 0 auto; */
+            display: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <h1 class="card-title"> I LOVE YOU! </h1>
+        
+        <div class="waterfall-area">
+            <!-- Using direct image URLs that are reliable -->
+            <div class="image-card" id="card1">
+                <img src="IMAGE1.JPG" alt="Portrait 1">
+            </div>
+            <div class="image-card" id="card2">
+                <img src="IMAGE2.JPG" alt="Portrait 2">
+            </div>
+            <div class="image-card" id="card3">
+                <img src="IMAGE3.JPG"Portrait 3">
+            </div>
+            <div class="image-card" id="card4">
+                <img src="IMAGE4.JPG" alt="Portrait 4">
+            </div>
+            <div class="image-card" id="card5">
+                <img src="IMAGE5.JPG" alt="Portrait 5">
+            </div>
+            <div class="image-card" id="card6">
+                <img src="IMAGE6.JPG" alt="Portrait 6">
+            </div>
+            <div class="image-card" id="card7">
+                <img src="IMAGE7.JPG" alt="Portrait 7">
+            </div>
+        </div>
+        
+        <button class="pull-tab" id="pullTab">PULL TAB</button>
+        <button class="reset-button" id="resetBtn">Reset</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const pullTab = document.getElementById('pullTab');
+            const resetBtn = document.getElementById('resetBtn');
+            const cards = document.querySelectorAll('.image-card');
+            
+            // Preload images
+            const preloadImages = () => {
+                cards.forEach(card => {
+                    const img = card.querySelector('img');
+                    const src = img.getAttribute('src');
+                    const newImg = new Image();
+                    newImg.src = src;
+                });
+            };
+            
+            // Call preload function
+            preloadImages();
+            
+            pullTab.addEventListener('click', function() {
+                // Hide pull button, show reset
+                pullTab.style.display = 'none';
+                resetBtn.style.display = 'block';
+                
+                // Reveal each card with a delay
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        // Adjusted spacing between cards
+                        card.style.top = (index * 70) + 'px';
+                    }, index * 800);
+                });
+            });
+            
+            resetBtn.addEventListener('click', function() {
+                // Hide reset button, show pull
+                resetBtn.style.display = 'none';
+                pullTab.style.display = 'block';
+                
+                // Reset all cards
+                cards.forEach((card, index) => {
+                    if (index > 0) {
+                        card.style.opacity = '0';
+                    }
+                    card.style.top = '0';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
